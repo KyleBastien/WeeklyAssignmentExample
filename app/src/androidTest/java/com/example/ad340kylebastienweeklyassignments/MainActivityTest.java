@@ -2,6 +2,7 @@ package com.example.ad340kylebastienweeklyassignments;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -28,19 +29,21 @@ public class MainActivityTest {
 
     @Test
     public void canGoThroughForm() {
-        onView(withId(R.id.nameField)).perform(typeText("Kyle Bastien"));
-        onView(withId(R.id.username)).perform(typeText("kylebastien"));
-        onView(withId(R.id.emailAddress)).perform(typeText("foo@bar.com"));
+        onView(withId(R.id.nameField)).perform(replaceText("Kyle Bastien"));
+        onView(withId(R.id.emailAddress)).perform(replaceText("foo@bar.com"));
+        onView(withId(R.id.usernameField)).perform(replaceText("kylebastien"));
 
         onView(withId(R.id.dobButton)).perform(click());
 
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName())))
                 .perform(PickerActions.setDate(2000, 2 + 1, 5));
 
+        onView(withId(android.R.id.button1)).perform(click());
+
         onView(withId(R.id.submitButton)).perform(click());
 
         onView(withId(R.id.welcomeText))
-                .check(matches(withText("Thank you for signing up kylebastien!")));
+                .check(matches(withText("Thanks for Signing Up kylebastien!")));
     }
 
 }

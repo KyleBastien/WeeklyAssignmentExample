@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
 
         nameField = findViewById(R.id.nameField);
         emailAddressField = findViewById(R.id.emailAddress);
-        usernameField = findViewById(R.id.username);
+        usernameField = findViewById(R.id.usernameField);
         dobTextView = findViewById(R.id.selectedDateOfBirth);
     }
 

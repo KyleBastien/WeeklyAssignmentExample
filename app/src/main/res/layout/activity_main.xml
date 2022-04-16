@@ -21,13 +21,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/please_input_your_email_address"
-        app:layout_constraintBottom_toTopOf="@id/username"
+        app:layout_constraintBottom_toTopOf="@id/usernameField"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nameField" />
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/usernameField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/please_input_your_username"
@@ -45,7 +45,7 @@
         app:layout_constraintBottom_toTopOf="@id/submitButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/username" />
+        app:layout_constraintTop_toBottomOf="@id/usernameField" />
 
     <TextView
         android:id="@+id/selectedDateOfBirth"
