@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity
     private EditText nameField;
     private EditText emailAddressField;
     private EditText usernameField;
+    private EditText descriptionField;
+    private EditText occupationField;
     private TextView dobTextView;
     private int dobYear = 0;
     private int dobMonth = 0;
@@ -39,21 +41,29 @@ public class MainActivity extends AppCompatActivity
         emailAddressField = findViewById(R.id.emailAddress);
         usernameField = findViewById(R.id.usernameField);
         dobTextView = findViewById(R.id.selectedDateOfBirth);
+        descriptionField = findViewById(R.id.descriptionField);
+        occupationField = findViewById(R.id.occupationField);
     }
 
     public void onSubmit(View view) {
         String name = nameField.getText().toString();
         String emailAddress = emailAddressField.getText().toString();
         String username = usernameField.getText().toString();
+        String description = descriptionField.getText().toString();
+        String occupation = occupationField.getText().toString();
 
-        if (name.equals("") || emailAddress.equals("") || username.equals("") || dobYear == 0 || dobMonth == 0 || dobDay == 0) {
+        if (description.equals("") || occupation.equals("") || name.equals("") ||
+                emailAddress.equals("") || username.equals("") || dobYear == 0 || dobMonth == 0
+                || dobDay == 0) {
             // empty strings are not valid form input show a Toast to the user
-            Toast.makeText(getApplicationContext(), getString(R.string.forgot_data_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.forgot_data_error),
+                    Toast.LENGTH_LONG).show();
             return;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()) {
-            Toast.makeText(getApplicationContext(), getString(R.string.email_address_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.email_address_error),
+                    Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -62,12 +72,16 @@ public class MainActivity extends AppCompatActivity
         int years = Period.between(dateOfBirth, currentDate).getYears();
 
         if (years < 18) {
-            Toast.makeText(getApplicationContext(), getString(R.string.eighteen_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.eighteen_error),
+                    Toast.LENGTH_LONG).show();
             return;
         }
 
         Intent intent = new Intent(getApplicationContext(), WelcomeScreen.class);
-        intent.putExtra(Constants.USERNAME_KEY, username);
+        intent.putExtra(Constants.USERNAME_KEY, name);
+        intent.putExtra(Constants.AGE_KEY, years);
+        intent.putExtra(Constants.DESCRIPTION_KEY, descriptionField.getText().toString());
+        intent.putExtra(Constants.OCCUPATION_KEY, occupationField.getText().toString());
         startActivity(intent);
     }
 
@@ -97,6 +111,8 @@ public class MainActivity extends AppCompatActivity
         usernameField.setText("");
         emailAddressField.setText("");
         dobTextView.setText("");
+        occupationField.setText("");
+        descriptionField.setText("");
         dobYear = 0;
         dobDay = 0;
         dobMonth = 0;
@@ -122,7 +138,8 @@ public class MainActivity extends AppCompatActivity
             int day = c.get(Calendar.DAY_OF_MONTH);
 
             // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), (MainActivity) getActivity(), year, month, day);
+            return new DatePickerDialog(getActivity(), (MainActivity) getActivity(),
+                    year, month, day);
         }
     }
 }

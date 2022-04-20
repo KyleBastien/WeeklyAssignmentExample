@@ -13,4 +13,7 @@
     <string name="select_your_date_of_birth">Select your Date of Birth</string>
     <string name="date">%1$d/%2$d/%3$d</string>
     <string name="back">Back</string>
+    <string name="a_picture_of_kyles_dog">A picture of Kyles dog</string>
+    <string name="please_input_your_occupation">Please input your occupation</string>
+    <string name="please_input_a_description_of_yourself">Please input a description of yourself</string>
 </resources>

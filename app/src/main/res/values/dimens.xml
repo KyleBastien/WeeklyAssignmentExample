@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="dog_image_width">200dp</dimen>
+    <dimen name="twenty">20dp</dimen>
+    <dimen name="threehundred">300dp</dimen>
+    <dimen name="thirtysp">30sp</dimen>
+    <dimen name="twentyfivesp">25sp</dimen>
+    <dimen name="five">5dp</dimen>
 </resources>
