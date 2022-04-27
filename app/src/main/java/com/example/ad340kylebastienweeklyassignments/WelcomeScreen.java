@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -124,6 +125,7 @@ public class WelcomeScreen extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(WelcomeScreen.class.getSimpleName(), "" + item.getItemId());
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
