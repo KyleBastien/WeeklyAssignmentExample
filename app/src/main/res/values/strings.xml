@@ -25,4 +25,9 @@
     <string name="settings">Settings</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="mark_t">Mark T</string>
+    <string name="really_cool_dude">Really cool dude</string>
+    <string name="image_of_the_match">Image of the match</string>
+    <string name="like">Like</string>
+    <string name="liked_message">You liked: %s</string>
 </resources>
