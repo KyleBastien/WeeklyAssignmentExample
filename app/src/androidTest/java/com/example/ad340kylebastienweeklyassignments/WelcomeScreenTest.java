@@ -28,7 +28,7 @@ public class WelcomeScreenTest {
         onView(withContentDescription("Open navigation drawer")).perform(click());
         onView(withId(R.id.matches_menu_item)).perform(click());
 
-        onView(isRoot()).perform(HelpersViewMatcher.waitId(R.id.recycler_view, 5000));
+        onView(isRoot()).perform(HelpersViewMatcher.waitView(withText("Cool Guy Mike"), 5000));
 
         onView(withRecyclerView(R.id.recycler_view).atPosition(0))
                 .check(matches(hasDescendant(withText("Cool Guy Mike"))));
