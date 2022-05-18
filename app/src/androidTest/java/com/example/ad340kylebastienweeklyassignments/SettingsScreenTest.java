@@ -46,6 +46,8 @@ public class SettingsScreenTest {
 
         onView(withId(R.id.radio_privacy)).perform(click());
 
+        onView(withId(R.id.age_range_slider)).perform(HelpersViewMatcher.setValue(25.0F, 35.0F));
+
         onView(withId(R.id.saveButton)).perform(click());
 
         onView(withContentDescription("Open navigation drawer")).perform(click());
@@ -69,6 +71,10 @@ public class SettingsScreenTest {
         onView(withId(R.id.edit_text_distance_in_miles)).perform(replaceText("50"));
 
         onView(withId(R.id.radio_she_her)).perform(click());
+
+        onView(withId(R.id.radio_privacy)).perform(click());
+
+        onView(withId(R.id.age_range_slider)).perform(HelpersViewMatcher.setValue(25.0F, 35.0F));
 
         onView(withId(R.id.saveButton)).perform(click());
 
@@ -94,6 +100,10 @@ public class SettingsScreenTest {
 
         onView(withId(R.id.radio_they_them)).perform(click());
 
+        onView(withId(R.id.radio_privacy)).perform(click());
+
+        onView(withId(R.id.age_range_slider)).perform(HelpersViewMatcher.setValue(25.0F, 35.0F));
+
         onView(withId(R.id.saveButton)).perform(click());
 
         onView(withContentDescription("Open navigation drawer")).perform(click());
@@ -117,6 +127,10 @@ public class SettingsScreenTest {
         onView(withId(R.id.edit_text_distance_in_miles)).perform(replaceText("50"));
 
         onView(withId(R.id.radio_no_answer)).perform(click());
+
+        onView(withId(R.id.radio_privacy)).perform(click());
+
+        onView(withId(R.id.age_range_slider)).perform(HelpersViewMatcher.setValue(25.0F, 35.0F));
 
         onView(withId(R.id.saveButton)).perform(click());
 
@@ -143,6 +157,10 @@ public class SettingsScreenTest {
         onView(withId(R.id.radio_he_him)).perform(click());
 
         onView(withId(R.id.radio_public)).perform(click());
+
+        onView(withId(R.id.radio_privacy)).perform(click());
+
+        onView(withId(R.id.age_range_slider)).perform(HelpersViewMatcher.setValue(25.0F, 35.0F));
 
         onView(withId(R.id.saveButton)).perform(click());
 
