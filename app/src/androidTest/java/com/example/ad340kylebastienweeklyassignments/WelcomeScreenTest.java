@@ -11,6 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static com.example.ad340kylebastienweeklyassignments.RecyclerViewMatcher.withRecyclerView;
 
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Rule;
@@ -32,5 +33,14 @@ public class WelcomeScreenTest {
 
         onView(withRecyclerView(R.id.recycler_view).atPosition(0))
                 .check(matches(hasDescendant(withText("Cool Guy Mike"))));
+    }
+
+    @Test
+    public void clickingOnSettingsDrawerItemDisplaysSettingsFragment() {
+        onView(withContentDescription("Open navigation drawer")).perform(click());
+        onView(withId(R.id.settings_menu_item)).perform(click());
+
+        onView(withId(R.id.matches_reminder_time_label)).check(
+                matches(withText("Pick your daily matches reminder time")));
     }
 }
