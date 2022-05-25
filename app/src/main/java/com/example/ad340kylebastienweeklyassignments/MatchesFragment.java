@@ -43,7 +43,6 @@ public class MatchesFragment extends Fragment {
     private final List<Matches> matchesList = new ArrayList<>();
     private MatchesRecyclerViewAdapter adapter;
     private SettingsViewModel settingsViewModel;
-    private static AtomicBoolean isRunningTest;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,9 +80,6 @@ public class MatchesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (isRunningTest()) {
-            setMockLocation(47.6082d, -122.1890d);
-        }
         toggleLocationUpdates();
     }
 
@@ -169,52 +165,4 @@ public class MatchesFragment extends Fragment {
         @Override
         public void onProviderDisabled(String s) {}
     };
-
-    public static synchronized boolean isRunningTest () {
-        if (null == isRunningTest) {
-            boolean istest;
-
-            try {
-                Class.forName ("android.support.test.espresso.Espresso");
-                istest = true;
-            } catch (ClassNotFoundException e) {
-                istest = false;
-            }
-
-            isRunningTest = new AtomicBoolean (istest);
-        }
-
-        return isRunningTest.get();
-    }
-
-    private void setMockLocation(double latitude, double longitude) {
-        locationManager.removeTestProvider(LocationManager.GPS_PROVIDER);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            locationManager.addTestProvider(
-                LocationManager.GPS_PROVIDER,
-                "requiresNetwork" == "",
-                "requiresSatellite" == "",
-                "requiresCell" == "",
-                "hasMonetaryCost" == "",
-                "supportsAltitude" == "",
-                "supportsSpeed" == "",
-                "supportsBearing" == "",
-                ProviderProperties.POWER_USAGE_LOW,
-                ProviderProperties.ACCURACY_FINE
-            );
-        }
-
-        Location newLocation = new Location(LocationManager.GPS_PROVIDER);
-        newLocation.setLatitude(latitude);
-        newLocation.setLongitude(longitude);
-
-        newLocation.setAccuracy(500);
-
-        locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
-
-        locationManager.setTestProviderStatus(LocationManager.GPS_PROVIDER,
-                LocationProvider.AVAILABLE, null, System.currentTimeMillis());
-
-        locationManager.setTestProviderLocation(LocationManager.GPS_PROVIDER, newLocation);
-    }
 }
