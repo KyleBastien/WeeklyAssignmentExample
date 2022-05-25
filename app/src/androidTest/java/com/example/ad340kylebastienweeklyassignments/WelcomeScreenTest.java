@@ -50,14 +50,6 @@ public class WelcomeScreenTest {
 
     @Test
     public void clickingOnMatchesDrawerItemDisplaysMatchesFragment() {
-        double latitude = 47.6082d;
-        double longitude = -122.1890d;
-        welcomeScreenActivity.getScenario().onActivity(activity -> {
-            LocationUtils.startUpdates(activity,
-                    new Handler(Looper.getMainLooper()),
-                    latitude, longitude);
-        });
-
         onView(withContentDescription("Open navigation drawer")).perform(click());
         onView(withId(R.id.matches_menu_item)).perform(click());
 
