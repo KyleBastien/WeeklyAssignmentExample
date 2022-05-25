@@ -1,21 +1,41 @@
 package com.example.ad340kylebastienweeklyassignments;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MatchesFragment extends Fragment {
 
     private MatchesViewModel vm;
+    private LocationManager locationManager;
+    private boolean isGettingLocationUpdates = false;
+    private final List<Matches> matchesList = new ArrayList<>();
+    private MatchesRecyclerViewAdapter adapter;
+    private SettingsViewModel settingsViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -23,14 +43,16 @@ public class MatchesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_matches, container, false);
 
-        final List<Matches> matchesList = new ArrayList<>();
+        locationManager = (LocationManager) view.getContext().getSystemService(Context.LOCATION_SERVICE);
+        settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+
         vm = new MatchesViewModel();
 
         // Set up the RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false));
-        MatchesRecyclerViewAdapter adapter = new MatchesRecyclerViewAdapter(matchesList, (match) -> {
+        adapter = new MatchesRecyclerViewAdapter(matchesList, (match) -> {
             match.setLiked(!match.isLiked());
             vm.updateMatch(match);
         });
@@ -38,12 +60,6 @@ public class MatchesFragment extends Fragment {
         int largePadding = getResources().getDimensionPixelSize(R.dimen.grid_spacing);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.small_grid_spacing);
         recyclerView.addItemDecoration(new MatchesItemDecoration(largePadding, smallPadding));
-
-        vm.getMatches(matches -> {
-            matchesList.clear();
-            matchesList.addAll(matches);
-            adapter.notifyDataSetChanged();
-        });
 
         return view;
     }
@@ -53,4 +69,89 @@ public class MatchesFragment extends Fragment {
         super.onPause();
         vm.clear();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        toggleLocationUpdates();
+    }
+
+    private boolean checkLocation() {
+        if(!isLocationEnabled()) {
+            showAlert();
+        }
+        return isLocationEnabled();
+    }
+
+    private boolean isLocationEnabled() {
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    private void showAlert() {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(requireContext());
+        dialog.setTitle(getString(R.string.enable_location))
+                .setMessage(R.string.location_message)
+                .setPositiveButton(R.string.location_settings, (paramDialogInterface, paramInt) -> {
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                })
+                .setNegativeButton(R.string.cancel, (paramDialogInterface, paramInt) -> {});
+        dialog.show();
+    }
+
+    public void toggleLocationUpdates() {
+        if(!checkLocation()) {
+            return;
+        }
+
+        if(isGettingLocationUpdates) {
+            locationManager.removeUpdates(locationListenerNetwork);
+            isGettingLocationUpdates = false;
+        }
+        else {
+            if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListenerNetwork);
+                Toast.makeText(requireContext(), R.string.started_location_updates, Toast.LENGTH_LONG).show();
+                isGettingLocationUpdates = true;
+            } else {
+                showAlert();
+            }
+        }
+    }
+
+    private final LocationListener locationListenerNetwork = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            final Observer<com.example.ad340kylebastienweeklyassignments.Settings> getSettingsObserver = newSettings -> {
+                if (newSettings == null) {
+                    return;
+                }
+
+                float maxDistance = 0.0f;
+                try {
+                    maxDistance = Float.parseFloat(newSettings.getMaxDistance());
+                } catch (NumberFormatException e) {
+                    maxDistance = 10.0f;
+                }
+
+                vm.getMatches(location, maxDistance, matches -> {
+                    matchesList.clear();
+                    matchesList.addAll(matches);
+                    adapter.notifyDataSetChanged();
+                });
+            };
+
+            settingsViewModel.getSetting(getContext()).observe(getViewLifecycleOwner(), getSettingsObserver);
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {}
+
+        @Override
+        public void onProviderEnabled(String s) {}
+
+        @Override
+        public void onProviderDisabled(String s) {}
+    };
 }
